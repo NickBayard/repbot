@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 import argparse
-from lib import create_db_session, RepBot
+from lib import RepBot
 
 
 def get_args():
@@ -13,6 +13,5 @@ def get_args():
 
 if __name__ == '__main__':
     args = get_args()
-    session = create_db_session(args.db_file)
-    bot = RepBot(session)
-    bot.run()
+    with RepBot(args.db_file) as bot:
+        bot.run()
