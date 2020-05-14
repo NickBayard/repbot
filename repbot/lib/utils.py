@@ -1,5 +1,7 @@
 import re
 import requests
+import logging
+import logging.handlers
 from bs4 import BeautifulSoup as bs
 from lib import constants
 from lib.models import Product
@@ -20,3 +22,15 @@ def item_in_stock(item: Product) -> bool:
             raise Exception(f'Product could not be found {item}')
 
     return in_stock
+
+
+def build_logger(name=None, level=logging.DEBUG):
+    log = logging.getLogger(name) if name else logging.getLogger()
+    log.setLevel(level)
+
+    formatter = logging.Formatter(fmt='{asctime} [{levelname}]({module}:{funcName}:{lineno}) {message}', style='{')
+    handler = logging.StreamHandler()
+    handler.setFormatter(formatter)
+    log.addHandler(handler)
+
+    return log

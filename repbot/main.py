@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import argparse
-from lib import RepBot
+import logging
+from lib import RepBot, build_logger
 
 
 def get_args():
@@ -13,5 +14,9 @@ def get_args():
 
 if __name__ == '__main__':
     args = get_args()
-    with RepBot(args.db_file) as bot:
-        bot.run()
+    log = build_logger('main')
+    bot = RepBot(args.db_file, logger=log)
+    items_to_purchase = bot.products_to_purchase()
+    if items_to_purchase:
+        items = '\n   '.join([str(i) for i in items_to_purchase])
+        log.info(f'Items are now available:\n   {items}')
