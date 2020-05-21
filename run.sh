@@ -1,9 +1,12 @@
 #!/usr/bin/env bash
 
-pushd $HOME/dev/repbot/
+pushd $HOME/dev/repbot/ 1> /dev/null
 
+source $HOME/.virtualenvs/repbot-aB2DAUvq/bin/activate
 export PYTHONPATH=$(pwd)/repbot/
 
-pipenv run python repbot/main.py --db repfit.db &>> log
+python repbot/main.py --db repfit.db &>> log
 
-popd
+deactivate
+
+popd 1> /dev/null
