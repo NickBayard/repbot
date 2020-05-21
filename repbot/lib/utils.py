@@ -5,6 +5,7 @@ import logging.handlers
 from bs4 import BeautifulSoup as bs
 from lib import constants
 from lib.models import Product
+from lib.errors import AvailabilityError
 
 
 def item_in_stock(item: Product) -> bool:
@@ -19,7 +20,7 @@ def item_in_stock(item: Product) -> bool:
                 in_stock = row.find(class_='availability out-of-stock') is None
                 break
         else:
-            raise Exception(f'Product could not be found {item}')
+            raise AvailabilityError(f'Product could not be found {item}')
 
     return in_stock
 

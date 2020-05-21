@@ -1,0 +1,6 @@
+username: your_email@here.com
+password: plain_text_password
+cc_type: mastercard
+cc_number: 1234123412341234
+cc_expiration: 2000-01-01
+ccv: 123
