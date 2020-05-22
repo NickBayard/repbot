@@ -16,7 +16,7 @@ def item_in_stock(item: Product) -> bool:
     if item.nested and in_stock:
         table = soup.find(id='super-product-table')
         for row in table.tbody:
-            if row.find(text=item.description):
+            if row.find(text=re.compile(item.description)):
                 in_stock = row.find(class_='availability out-of-stock') is None
                 break
         else:
