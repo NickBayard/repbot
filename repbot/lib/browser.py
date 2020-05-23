@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from lib.utils import build_logger
 from lib.errors import BrowserError
+from lib.constants import REPBASEURL, REPURL
 
 
 class Browser:
@@ -40,7 +41,7 @@ class Browser:
         return self._driver
 
     def login(self):
-        pass  # TODO
+        self.driver.get(REPBASEURL)
 
     def logout(self):
         pass  # TODO

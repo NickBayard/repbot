@@ -1,1 +1,2 @@
-REPURL = 'https://www.repfitness.com/{}'
+REPBASEURL = 'https://www.repfitness.com'
+REPURL = f'{REPBASEURL}/{{}}'
