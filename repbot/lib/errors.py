@@ -8,3 +8,7 @@ class BrowserError(Exception):
 
 class UserError(Exception):
     pass
+
+
+class GmailError(Exception):
+    pass

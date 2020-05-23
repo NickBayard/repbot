@@ -2,12 +2,11 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from lib.utils import build_logger
 from lib.errors import BrowserError
-from lib.user import User
 
 
 class Browser:
     def __init__(self, user_info, headless=True, logger=None):
-        self.user = User.create(user_info)
+        self.user = user_info
         self._driver = None
         self.headless = headless
         self.log = logger if logger is not None else build_logger('repbot')
@@ -51,3 +50,9 @@ class Browser:
 
     def checkout(self):
         pass  # TODO
+
+    def purchase_items(self, items):
+        self.log.info('Attempting to make purchases.')
+        for item in items:
+            self.add_item_to_cart(item)
+        self.checkout()

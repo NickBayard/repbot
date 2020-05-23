@@ -7,8 +7,9 @@ from lib.models import Product
 
 
 class RepBot:
-    def __init__(self, db, browser=None, logger=None):
+    def __init__(self, db, email=None, browser=None, logger=None):
         self.db_file = db
+        self.email = email
         self.browser = browser
         self._session = None
         self.log = logger if logger is not None else build_logger('repbot')
@@ -42,11 +43,12 @@ class RepBot:
         products = self.products_to_purchase()
         if products:
             items = '\n   '.join([str(i) for i in products])
-            self.log.info(f'Items are now available:\n   {items}')
+            msg = f'Items are now available:\n   {items}'
+
+            self.log.info(msg)
+
+            if self.email is not None:
+                self.email.send('RepBot - In stock notice', msg)
 
             if self.browser is not None:
-                self.log.info('Attempting to make purchases.')
-
-                for product in products:
-                    self.browser.add_item_to_cart(product)
-                self.browser.checkout()
+                self.browser.purchase_items(items)

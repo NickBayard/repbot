@@ -8,20 +8,49 @@ except ImportError:
 from pathlib import Path
 from dataclasses import dataclass
 from datetime import date
+from typing import List
+
 from lib.errors import UserError
 
 
 @dataclass
-class User:
+class Login:
     username: str
     password: str
-    cc_type: str
-    cc_number: int
-    cc_expiration: date
-    ccv: int
 
     def __repr__(self):
         return f'{self.__class__.__name__}(username={self.username})'
+
+
+@dataclass
+class CreditCard:
+    type: str
+    number: int
+    expiration: date
+    verification: int
+
+    def __repr__(self):
+        return f'{self.__class__.__name__}(type={self.type})'
+
+
+@dataclass
+class Notification:
+    api_account: str
+    emails: List[str]
+
+    def __repr__(self):
+        return f'{self.__class__.__name__}(api_account={self.api_account}, emails={self.emails})'
+
+
+@dataclass
+class User:
+    login: Login
+    credit_card: CreditCard
+    notification: Notification
+
+    def __repr__(self):
+        return f'{self.__class__.__name__}(login={self.login}, credit_card={self.credit_card}, '\
+               f'notification={self.notification})'
 
     @staticmethod
     def create(user_yaml):
@@ -32,4 +61,6 @@ class User:
         with p.open() as f:
             data = yaml.load(f, Loader=Loader)
 
-        return User(**data)
+        return User(login=Login(**data.get('login', {})),
+                    credit_card=CreditCard(**data.get('credit_card')),
+                    notification=Notification(**data.get('notification')))
