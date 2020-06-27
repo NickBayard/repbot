@@ -21,7 +21,7 @@ class Gmail:
         self.creds_file = creds_file
         self.ptoken = Path(ptoken)
         self._service = None
-        self.log = build_logger('repbot.gmail')
+        self.log = build_logger('gmail')
 
     @property
     def service(self):
