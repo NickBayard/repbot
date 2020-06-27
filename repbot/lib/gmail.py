@@ -21,35 +21,42 @@ class Gmail:
         self.creds_file = creds_file
         self.ptoken = Path(ptoken)
         self._service = None
-        self.log = build_logger('gmail')
+        self._credentials = None
+        self.log = build_logger('repbot.gmail')
 
     @property
     def service(self):
         if self._service is None:
-            self._service = self.get_service()
+            self._service = build('gmail', 'v1', credentials=self.credentials)
         return self._service
 
-    def get_service(self):
-        creds = None
-        # The file token.pickle stores the user's access and refresh tokens, and is
-        # created automatically when the authorization flow completes for the first
-        # time.
-        if self.ptoken.exists():
-            with self.ptoken.open('rb') as token:
-                creds = pickle.load(token)
+    @property
+    def credentials(self):
+        if self._credentials is None:
+            # The file token.pickle stores the user's access and refresh tokens, and is
+            # created automatically when the authorization flow completes for the first
+            # time.
+            if self.ptoken.exists():
+                with self.ptoken.open('rb') as token:
+                    self._credentials = pickle.load(token)
+
         # If there are no (valid) credentials available, let the user log in.
-        if not creds or not creds.valid:
-            if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            else:
-                flow = InstalledAppFlow.from_client_secrets_file(
-                    self.creds_file, self.SCOPES)
-                creds = flow.run_local_server(port=0)
+        if not self._credentials.valid:
+            try:
+                if self._credentials.expired and self._credentials.refresh_token:
+                    self._credentials.refresh(Request())
+                else:
+                    flow = InstalledAppFlow.from_client_secrets_file(
+                        self.creds_file, self.SCOPES)
+                    self._credentials = flow.run_local_server(port=0)
+            except Exception as ex:
+                raise GmailError('Failed to get google api token') from ex
+
             # Save the credentials for the next run
             with self.ptoken.open('wb') as token:
-                pickle.dump(creds, token)
+                pickle.dump(self._credentials, token)
 
-        return build('gmail', 'v1', credentials=creds)
+        return self._credentials
 
     def send(self, subject, message_text):
         for recipient in self.notification.emails:
