@@ -5,6 +5,7 @@ from sqlalchemy import (
     String,
     Boolean,
 )
+from lib import constants
 
 
 class Product(Base):
@@ -19,6 +20,7 @@ class Product(Base):
     purchased = Column(Boolean, default=False)
 
     def __repr__(self):
-        return f'{self.__class__.__name__}(name={self.name}, endpoint={self.endpoint}, ' \
+        url = constants.REPURL.format(self.endpoint)
+        return f'{self.__class__.__name__}(name={self.name}, endpoint={url}, ' \
                f'description={self.description}, quantity={self.quantity}, nested={self.nested}, ' \
                f'purchased={self.purchased})'
