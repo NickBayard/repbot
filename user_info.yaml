@@ -1,13 +1,6 @@
-loging:
-    username: your_email@here.com
-    password: plain_text_password
-credit_card:
-    type: mastercard
-    number: 1234123412341234
-    expiration: 2000-01-01
-    verification: 123
 notification:
-    api_account: myseviceaccount@gmail.com
+    # api_account points to the email account that will send the emails/texts
+    api_account: myserviceaccount@gmail.com
     emails:
       - abc@email.com
       - 5551234567@mms.att.net  # Send text

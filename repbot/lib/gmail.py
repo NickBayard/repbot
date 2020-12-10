@@ -41,9 +41,9 @@ class Gmail:
                     self._credentials = pickle.load(token)
 
         # If there are no (valid) credentials available, let the user log in.
-        if not self._credentials.valid:
+        if not self._credentials or not self._credentials.valid:
             try:
-                if self._credentials.expired and self._credentials.refresh_token:
+                if self._credentials and self._credentials.expired and self._credentials.refresh_token:
                     self._credentials.refresh(Request())
                 else:
                     flow = InstalledAppFlow.from_client_secrets_file(

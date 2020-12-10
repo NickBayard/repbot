@@ -6,19 +6,16 @@ from lib.constants import REPBASEURL, REPURL
 
 
 class Browser:
-    def __init__(self, user_info, headless=True, logger=None):
-        self.user = user_info
+    # FIXME For future release that will purchase new items
+    def __init__(self, headless=True, logger=None):
         self._driver = None
         self.headless = headless
         self.log = logger if logger is not None else build_logger('repbot')
 
     @staticmethod
-    def create(user_info, headless=True):
-        if not user_info:
-            raise BrowserError('User info must be provided to make purchases.')
-        else:
-            with Browser(user_info, headless=headless) as b:
-                yield b
+    def create(headless=True):
+        with Browser(headless=headless) as b:
+            yield b
 
     def __enter__(self):
         self.login()

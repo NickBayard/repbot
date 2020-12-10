@@ -6,7 +6,7 @@ class BrowserError(Exception):
     pass
 
 
-class UserError(Exception):
+class NotifyError(Exception):
     pass
 
 
